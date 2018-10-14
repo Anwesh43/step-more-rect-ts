@@ -3,6 +3,8 @@ const nodes : number = 5
 class StepMoreRectStage {
     canvas : HTMLCanvasElement = document.createElement('canvas')
     context : CanvasRenderingContext2D
+    smr : StepMoreRect = new StepMoreRect()
+    animator : Animator = new Animator()
 
     initCanvas() {
         this.canvas.width = w
@@ -14,12 +16,26 @@ class StepMoreRectStage {
     render() {
         this.context.fillStyle = '#BDBDBD'
         this.context.fillRect(0, 0, w, h)
+        this.smr.draw(this.context)
     }
 
     handleTap() {
         this.canvas.onmousedown = () => {
-
+            this.smr.startUpdating(() => {
+                this.animator.start(() => {
+                    this.render()
+                    this.smr.update(() => {
+                        this.animator.stop()
+                    })
+                })
+            })
         }
+    }
+
+    static init() {
+        const stage : StepMoreRectStage = new StepMoreRectStage()
+        stage.render()
+        stage.handleTap()
     }
 }
 
