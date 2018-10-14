@@ -26,6 +26,7 @@ class StepMoreRectStage {
                     this.render()
                     this.smr.update(() => {
                         this.animator.stop()
+                        this.render()
                     })
                 })
             })
@@ -34,6 +35,7 @@ class StepMoreRectStage {
 
     static init() {
         const stage : StepMoreRectStage = new StepMoreRectStage()
+        stage.initCanvas()
         stage.render()
         stage.handleTap()
     }
@@ -113,6 +115,9 @@ class SMRNode {
             context.restore()
         }
         context.restore()
+        if (this.prev) {
+            this.prev.draw(context)
+        }
     }
 
     update(cb : Function) {
@@ -138,9 +143,7 @@ class SMRNode {
 
 class StepMoreRect {
 
-    root : SMRNode = new SMRNode(0)
-
-    curr : SMRNode = this.root
+    curr : SMRNode = new SMRNode(0)
 
     dir : number = 1
 
